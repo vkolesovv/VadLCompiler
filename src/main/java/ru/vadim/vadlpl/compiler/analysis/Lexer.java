@@ -6,7 +6,7 @@ import ru.vadim.vadlpl.compiler.tokens.TokenType;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Lexer {
+public final class Lexer {
     public static final TokenType[] OPERATORS = {
             TokenType.PLUS, TokenType.MINUS, TokenType.STAR, TokenType.SLASH, TokenType.PERCENT, TokenType.POW, TokenType.ROOT_OF_NUMBER, TokenType.SEPARATOR
     };
@@ -32,12 +32,38 @@ public class Lexer {
             final char current = this.peek();
             if (Character.isDigit(current)) tokenizeNumber();
             else if (OPERATOR_CHARS.indexOf(current) != -1) tokenizeOperator();
+            else if (current == '"') tokenizeString();
+            else if (Character.isLetter(current)) tokenizeWord();
             else if (Character.isWhitespace(current)) next();
             else {
                 throw new RuntimeException("VD0001: Incorrect symbol");
             }
         }
         return tokens;
+    }
+
+    private void tokenizeWord() {
+        char current = peek();
+        final StringBuilder builder = new StringBuilder();
+
+        while (Character.isLetterOrDigit(current)) {
+            builder.append(current);
+            current = next();
+        }
+        addToken(TokenType.WORD, builder.toString());
+    }
+
+    private void tokenizeString() {
+        char current = next();
+        final StringBuilder builder = new StringBuilder();
+
+        while (current != '"') {
+            builder.append(current);
+            current = next();
+        }
+
+        next();
+        addToken(TokenType.STRING, builder.toString());
     }
 
     private void tokenizeOperator() {
