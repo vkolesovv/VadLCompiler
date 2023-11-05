@@ -11,7 +11,7 @@ public final class Lexer {
             TokenType.PLUS, TokenType.MINUS, TokenType.STAR, TokenType.SLASH, TokenType.PERCENT, TokenType.POW, TokenType.ROOT_OF_NUMBER, TokenType.SEPARATOR
     };
 
-    public static final String OPERATOR_CHARS = "+-*/%^<:";
+    public static final String OPERATOR_CHARS = "+-*/%^√:";
 
     private final String text;
     private final int length;

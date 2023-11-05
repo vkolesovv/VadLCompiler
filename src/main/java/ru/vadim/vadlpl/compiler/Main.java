@@ -5,9 +5,9 @@ import ru.vadim.vadlpl.compiler.tokens.Token;
 
 import java.util.List;
 
-public class Main {
+public final class Main {
     public static void main(String[] args) {
-        String input = "2 + 2";
+        String input = "2 √ 2";
 
         List<Token> tokens = new Lexer(input).tokenize();
 
