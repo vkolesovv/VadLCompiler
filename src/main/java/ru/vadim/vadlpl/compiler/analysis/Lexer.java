@@ -80,7 +80,7 @@ public final class Lexer {
             builder.append(current);
             current = next();
         }
-        addToken(TokenType.INT, builder.toString());
+        addToken(TokenType.NUMBER, builder.toString());
     }
 
     // Adding tokens
