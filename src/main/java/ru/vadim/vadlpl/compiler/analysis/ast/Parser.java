@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class Parser {
-    private static Token EOF = new Token(TokenType.EOF);
+    private static final Token EOF = new Token(TokenType.EOF);
 
     private final List<Token> tokens;
     private final int size;
@@ -24,11 +24,11 @@ public final class Parser {
 
     // Parsing
 
-    public List<Expression> parse() {
-        final List<Expression> result = new ArrayList<>();
+    public List<Statement> parse() {
+        final List<Statement> result = new ArrayList<>();
 
         while (!match(TokenType.EOF)) {
-            result.add(expression());
+            result.add(statement());
         }
         return result;
     }
@@ -43,7 +43,7 @@ public final class Parser {
         Token currentToken = this.get();
         if (match(TokenType.WORD) && this.get().getType() == TokenType.ASSIGN) {
             String variable = currentToken.getText();
-            consume(TokenType.ASSIGN);
+            this.consume(TokenType.ASSIGN);
             return new AssignmentStatement(variable, expression());
         }
         throw new RuntimeException("VD0005: Unknown statement");
@@ -56,16 +56,13 @@ public final class Parser {
     }
 
     private Expression additive() {
-        Expression expression = multiplicative();
+        Expression expression = this.multiplicative();
 
-        while (true) {
-            if (this.match(TokenType.PLUS)) {
-                return new BinaryExpression('+', expression, multiplicative());
-            }
-            if (this.match(TokenType.MINUS)) {
-                return new BinaryExpression('-', expression, multiplicative());
-            }
-            break;
+        if (this.match(TokenType.PLUS)) {
+            return new BinaryExpression('+', expression, multiplicative());
+        }
+        if (this.match(TokenType.MINUS)) {
+            return new BinaryExpression('-', expression, multiplicative());
         }
         return expression;
     }
@@ -73,14 +70,11 @@ public final class Parser {
     private Expression multiplicative() {
         Expression expression = this.pow();
 
-        while (true) {
-            if (this.match(TokenType.STAR)) {
-                return new BinaryExpression('*', expression, pow());
-            }
-            if (this.match(TokenType.SLASH)) {
-                return new BinaryExpression('/', expression, pow());
-            }
-            break;
+        if (this.match(TokenType.STAR)) {
+            return new BinaryExpression('*', expression, pow());
+        }
+        if (this.match(TokenType.SLASH)) {
+            return new BinaryExpression('/', expression, pow());
         }
         return expression;
     }
@@ -88,14 +82,11 @@ public final class Parser {
     private Expression pow() {
         Expression expression = this.unary();
 
-        while (true) {
-            if (this.match(TokenType.POW)) {
-                return new BinaryExpression('^', expression, this.unary());
-            }
-            if (this.match(TokenType.ROOT_OF_NUMBER)) {
-                return new BinaryExpression('√', expression, this.unary());
-            }
-            break;
+        if (this.match(TokenType.POW)) {
+            return new BinaryExpression('^', expression, this.unary());
+        }
+        if (this.match(TokenType.ROOT_OF_NUMBER)) {
+            return new BinaryExpression('√', expression, this.unary());
         }
         return expression;
     }
@@ -113,13 +104,13 @@ public final class Parser {
         if (this.match(TokenType.NUMBER)) {
             return new NumberExpression(Double.parseDouble(current.getText()));
         }
-        if (this.match(TokenType.LEFT_PAREN)) {
-            Expression expression = this.expression();
-            match(TokenType.RIGHT_PAREN);
-            return expression;
-        }
         if (this.match(TokenType.WORD)) {
             return new VariableExpression(current.getText());
+        }
+        if (this.match(TokenType.LEFT_PAREN)) {
+            Expression expression = this.expression();
+            this.match(TokenType.RIGHT_PAREN);
+            return expression;
         }
 
         throw new RuntimeException("VD0003: Undefined token type");
@@ -137,6 +128,7 @@ public final class Parser {
     private Token consume(TokenType type) {
         Token current = this.get();
         if (type != current.getType()) throw new RuntimeException("VD0004: Expected " + type + " token. Got " + current.getType());
+        this.position++;
         return current;
     }
 
