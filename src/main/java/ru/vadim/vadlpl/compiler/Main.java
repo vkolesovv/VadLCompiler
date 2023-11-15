@@ -5,11 +5,12 @@ import ru.vadim.vadlpl.compiler.analysis.ast.Parser;
 import ru.vadim.vadlpl.compiler.analysis.ast.expressions.Expression;
 import ru.vadim.vadlpl.compiler.tokens.Token;
 
+import java.io.*;
 import java.util.List;
 
 public final class Main {
-    public static void main(String[] args) {
-        String input = "1";
+    public static void main(String[] args) throws IOException, ClassNotFoundException {
+        String input = "PI + 2\n2 + 3";
 
         List<Token> tokens = new Lexer(input).tokenize();
 
@@ -19,8 +20,23 @@ public final class Main {
 
         List<Expression> expressions = new Parser(tokens).parse();
 
-        for (Expression expression : expressions) {
-            System.out.println(expression.eval().asDouble());
+        /*
+        FileInputStream fis = new FileInputStream("gaziches.bin");
+        ObjectInputStream oin = new ObjectInputStream(fis);
+
+        List<Expression> expressionsOIS = (List<Expression>) oin.readObject();
+        for (Expression expression : expressionsOIS) {
+            System.out.println(expression.eval().asString());
         }
+         */ // Здесь из байт-кода JVM можно забрать список выражений
+
+        /*
+        FileOutputStream stream = new FileOutputStream("gaziches.bin");
+        ObjectOutputStream objectOutputStream = new ObjectOutputStream(stream);
+
+        objectOutputStream.writeObject(expressions);
+        objectOutputStream.flush();
+        objectOutputStream.close();
+         */ // А здесь - записать
     }
 }

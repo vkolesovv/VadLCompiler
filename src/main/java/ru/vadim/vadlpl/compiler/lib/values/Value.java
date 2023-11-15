@@ -1,4 +1,4 @@
-package ru.vadim.vadlpl.compiler.lib;
+package ru.vadim.vadlpl.compiler.lib.values;
 
 import java.io.Serializable;
 

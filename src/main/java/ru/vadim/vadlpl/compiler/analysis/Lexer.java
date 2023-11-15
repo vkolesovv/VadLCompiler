@@ -8,10 +8,11 @@ import java.util.List;
 
 public final class Lexer {
     public static final TokenType[] OPERATORS = {
-            TokenType.PLUS, TokenType.MINUS, TokenType.STAR, TokenType.SLASH, TokenType.PERCENT, TokenType.POW, TokenType.ROOT_OF_NUMBER, TokenType.SEPARATOR
+            TokenType.PLUS, TokenType.MINUS, TokenType.STAR, TokenType.SLASH, TokenType.PERCENT, TokenType.POW, TokenType.ROOT_OF_NUMBER, TokenType.SEPARATOR,
+            TokenType.LEFT_PAREN, TokenType.RIGHT_PAREN, TokenType.ASSIGN
     };
 
-    public static final String OPERATOR_CHARS = "+-*/%^√:";
+    public static final String OPERATOR_CHARS = "+-*/%^√:()=";
 
     private final String text;
     private final int length;
@@ -76,7 +77,13 @@ public final class Lexer {
 
         char current = peek();
 
-        while (Character.isDigit(current)) {
+        while (true) {
+            if (current == '.') {
+                if (builder.indexOf(".") != -1) throw new RuntimeException("VD0004: Unexpected dot");
+            }
+            else if (!Character.isDigit(current)) {
+                break;
+            }
             builder.append(current);
             current = next();
         }

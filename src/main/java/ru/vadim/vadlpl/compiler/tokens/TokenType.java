@@ -7,8 +7,11 @@ public enum TokenType {
 
     PLUS, MINUS, STAR, SLASH, PERCENT, POW, ROOT_OF_NUMBER,
 
-    SEPARATOR, // :
+    LEFT_PAREN,
+    RIGHT_PAREN,
 
+    SEPARATOR, // :
+    ASSIGN, // =
 
     EOF
 }

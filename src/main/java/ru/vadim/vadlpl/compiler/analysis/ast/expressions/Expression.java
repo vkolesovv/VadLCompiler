@@ -1,6 +1,6 @@
 package ru.vadim.vadlpl.compiler.analysis.ast.expressions;
 
-import ru.vadim.vadlpl.compiler.lib.Value;
+import ru.vadim.vadlpl.compiler.lib.values.Value;
 
 import java.io.Serializable;
 
