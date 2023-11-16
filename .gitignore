@@ -7,7 +7,6 @@ build/
 ### Tests ###
 
 src/test
-gaziches.bin
 
 ### IntelliJ IDEA ###
 .idea/modules.xml

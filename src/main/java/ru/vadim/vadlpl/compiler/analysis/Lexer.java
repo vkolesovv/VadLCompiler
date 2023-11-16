@@ -9,10 +9,10 @@ import java.util.List;
 public final class Lexer {
     public static final TokenType[] OPERATORS = {
             TokenType.PLUS, TokenType.MINUS, TokenType.STAR, TokenType.SLASH, TokenType.PERCENT, TokenType.POW, TokenType.ROOT_OF_NUMBER, TokenType.SEPARATOR,
-            TokenType.LEFT_PAREN, TokenType.RIGHT_PAREN, TokenType.ASSIGN
+            TokenType.LEFT_PAREN, TokenType.RIGHT_PAREN, TokenType.EQ, TokenType.LT, TokenType.GT
     };
 
-    public static final String OPERATOR_CHARS = "+-*/%^√:()=";
+    public static final String OPERATOR_CHARS = "+-*/%^√:()=<>";
 
     private final String text;
     private final int length;
@@ -52,10 +52,13 @@ public final class Lexer {
             current = next();
         }
         switch (builder.toString()) {
-            case "print": addToken(TokenType.PRINT); return;
+            case "print": addToken(TokenType.PRINT); break;
+            case "if": addToken(TokenType.IF); break;
+            case "else": addToken(TokenType.ELSE); break;
+            default:
+                addToken(TokenType.WORD, builder.toString());
+                break;
         }
-
-        addToken(TokenType.WORD, builder.toString());
     }
 
     private void tokenizeString() {

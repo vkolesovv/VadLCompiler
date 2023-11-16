@@ -1,2 +1,13 @@
-govno = 2^3
-print "govno"
+weight = 1
+height = 150
+
+bmi = weight / (height / 100) ^ 2
+
+if (bmi > 50)
+    print "Вы царь-бимба!"
+else if (bmi > 40)
+    print "Вы пудж!"
+else if (bmi < 20)
+    print "Вкидывайтесь слойками!"
+else
+    print "Этот ноускоп войдёт в историю"

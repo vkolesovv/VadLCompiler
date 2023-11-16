@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'ru.vadim.vadlpl.compiler'
-version '0.0.1'
+version '0.1'
 mainClassName = 'ru.vadim.vadlpl.compiler.Main'
 
 repositories {

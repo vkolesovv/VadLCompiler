@@ -2,6 +2,7 @@ package ru.vadim.vadlpl.compiler.analysis.ast;
 
 import ru.vadim.vadlpl.compiler.analysis.ast.expressions.*;
 import ru.vadim.vadlpl.compiler.analysis.ast.statements.AssignmentStatement;
+import ru.vadim.vadlpl.compiler.analysis.ast.statements.IfStatement;
 import ru.vadim.vadlpl.compiler.analysis.ast.statements.PrintStatement;
 import ru.vadim.vadlpl.compiler.analysis.ast.statements.Statement;
 import ru.vadim.vadlpl.compiler.tokens.Token;
@@ -29,7 +30,7 @@ public final class Parser {
         final List<Statement> result = new ArrayList<>();
 
         while (!match(TokenType.EOF)) {
-            result.add(statement());
+            result.add(this.statement());
         }
         return result;
     }
@@ -38,17 +39,33 @@ public final class Parser {
 
     private Statement statement() {
         if (this.match(TokenType.PRINT)) {
-            return new PrintStatement(expression());
+            return new PrintStatement(this.expression());
+        }
+        if (this.match(TokenType.IF)) {
+            return this.ifElse();
         }
         return this.assignmentStatement();
     }
 
+    private Statement ifElse() {
+        Expression condition = expression();
+        Statement ifStatement = statement();
+        Statement elseStatement;
+
+        if (match(TokenType.ELSE)) {
+            elseStatement = statement();
+        } else {
+            elseStatement = null;
+        }
+        return new IfStatement(condition, ifStatement, elseStatement);
+    }
+
     private Statement assignmentStatement() {
         Token currentToken = this.get();
-        if (match(TokenType.WORD) && this.get().getType() == TokenType.ASSIGN) {
+        if (match(TokenType.WORD) && this.get().getType() == TokenType.EQ) {
             String variable = currentToken.getText();
-            this.consume(TokenType.ASSIGN);
-            return new AssignmentStatement(variable, expression());
+            this.consume(TokenType.EQ);
+            return new AssignmentStatement(variable, this.expression());
         }
         throw new RuntimeException("VD0005: Unknown statement");
     }
@@ -56,7 +73,22 @@ public final class Parser {
     // Expressions
 
     private Expression expression() {
-        return additive();
+        return this.conditional();
+    }
+
+    private Expression conditional() {
+        Expression expression = this.additive();
+
+        if (this.match(TokenType.LT)) {
+            return new ConditionalExpression(expression, this.additive(), '<');
+        }
+        if (this.match(TokenType.GT)) {
+            return new ConditionalExpression(expression, this.additive(), '>');
+        }
+        if (this.match(TokenType.EQ)) {
+            return new ConditionalExpression(expression, this.additive(), '=');
+        }
+        return expression;
     }
 
     private Expression additive() {

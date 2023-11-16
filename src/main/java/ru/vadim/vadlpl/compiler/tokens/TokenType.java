@@ -7,13 +7,28 @@ public enum TokenType {
 
     PLUS, MINUS, STAR, SLASH, PERCENT, POW, ROOT_OF_NUMBER,
 
-    LEFT_PAREN,
-    RIGHT_PAREN,
+    LEFT_PAREN, // (
+    RIGHT_PAREN, // )
 
     SEPARATOR, // :
-    ASSIGN, // =
+    EQ, // =
+    EQEQ, // ==
+    LT, // <
+    GT, // >
+    LTEQ, // <=
+    GTEQ, // >=
+    EXCL, // !
+    EXCLEQ, // !=
+
+    BAR,
+    BARBAR,
+
+    AMP, // &
+    AMPAMP, // &&
 
     PRINT,
+    IF,
+    ELSE,
 
     EOF
 }

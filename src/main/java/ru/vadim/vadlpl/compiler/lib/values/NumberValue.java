@@ -6,6 +6,9 @@ public class NumberValue implements Value {
     public NumberValue(double value) {
         this.rawValue = value;
     }
+    public NumberValue(boolean value) {
+        this.rawValue = value ? 1 : 0;
+    }
 
     @Override
     public double asDouble() {
