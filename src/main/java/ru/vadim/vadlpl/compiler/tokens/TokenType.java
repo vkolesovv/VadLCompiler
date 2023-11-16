@@ -13,5 +13,7 @@ public enum TokenType {
     SEPARATOR, // :
     ASSIGN, // =
 
+    PRINT,
+
     EOF
 }

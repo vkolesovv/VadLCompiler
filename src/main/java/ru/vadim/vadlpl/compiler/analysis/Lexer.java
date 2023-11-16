@@ -51,6 +51,10 @@ public final class Lexer {
             builder.append(current);
             current = next();
         }
+        switch (builder.toString()) {
+            case "print": addToken(TokenType.PRINT); return;
+        }
+
         addToken(TokenType.WORD, builder.toString());
     }
 

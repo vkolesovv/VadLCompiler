@@ -2,6 +2,7 @@ package ru.vadim.vadlpl.compiler.analysis.ast;
 
 import ru.vadim.vadlpl.compiler.analysis.ast.expressions.*;
 import ru.vadim.vadlpl.compiler.analysis.ast.statements.AssignmentStatement;
+import ru.vadim.vadlpl.compiler.analysis.ast.statements.PrintStatement;
 import ru.vadim.vadlpl.compiler.analysis.ast.statements.Statement;
 import ru.vadim.vadlpl.compiler.tokens.Token;
 import ru.vadim.vadlpl.compiler.tokens.TokenType;
@@ -36,6 +37,9 @@ public final class Parser {
     // Statements
 
     private Statement statement() {
+        if (this.match(TokenType.PRINT)) {
+            return new PrintStatement(expression());
+        }
         return this.assignmentStatement();
     }
 
@@ -102,10 +106,13 @@ public final class Parser {
         Token current = this.get();
 
         if (this.match(TokenType.NUMBER)) {
-            return new NumberExpression(Double.parseDouble(current.getText()));
+            return new ValueExpression(Double.parseDouble(current.getText()));
         }
         if (this.match(TokenType.WORD)) {
             return new VariableExpression(current.getText());
+        }
+        if (this.match(TokenType.STRING)) {
+            return new ValueExpression(current.getText());
         }
         if (this.match(TokenType.LEFT_PAREN)) {
             Expression expression = this.expression();

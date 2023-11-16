@@ -5,11 +5,14 @@ import ru.vadim.vadlpl.compiler.analysis.ast.Parser;
 import ru.vadim.vadlpl.compiler.analysis.ast.statements.Statement;
 import ru.vadim.vadlpl.compiler.tokens.Token;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 
 public final class Main {
-    public static void main(String[] args) {
-        String input = "amj = 21\ngaz = amj + 2";
+    public static void main(String[] args) throws IOException {
+        String input = new String(Files.readAllBytes(Paths.get("example.vadl")), "UTF-8");
 
         List<Token> tokens = new Lexer(input).tokenize();
 
@@ -23,9 +26,9 @@ public final class Main {
             statement.execute();
         }
 
-        for (Statement statement : statements) {
-            System.out.println(statement);
-        }
+//        for (Statement statement : statements) {
+//            System.out.println(statement);
+//        }
 
         /*
         FileInputStream fis = new FileInputStream("gaziches.bin");
